@@ -14,10 +14,8 @@ class PlayerHands : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     }
 
     func onEntityMouseClick(globalLocation:Point) {
-        
         let rightHandContainment = rightHand.destRect.containment(target: globalLocation)
         let leftHandContainment = leftHand.destRect.containment(target: globalLocation)
-        print("right: \(rightHandContainment), left: \(leftHandContainment)")
         if setContainsSet(rightHandContainment, [.containedFully]) && !rightHand.isSelected {
             rightHand.isSelected = true
             leftHand.reset()

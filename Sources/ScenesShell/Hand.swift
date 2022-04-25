@@ -45,7 +45,7 @@ class Hand : RenderableEntity {
             }
             hand = Image(sourceURL: handURL)
         case "test":
-            guard let handURL = URL(string: "https://i.ibb.co/D40xDKN/test.png") else {
+            guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/test.png") else {
                 fatalError("Failed to create URL for test hand")
             }
             hand = Image(sourceURL: handURL)
