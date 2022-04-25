@@ -5,6 +5,11 @@ import Igis
  the Director.
  It rarely needs to be altered.
  */
+
+struct GlobalVars {
+    static let imageSize = Size(width: 256, height: 256)
+}
+
 print("Starting...")
 do {
     let igis = Igis()
