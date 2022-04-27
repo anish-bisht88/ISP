@@ -6,6 +6,9 @@ class OpponentHands : RenderableEntity {
 
     let leftHand : Hand
     let rightHand : Hand
+    
+    var leftFingers = 1
+    var rightFingers = 1
 
     var canvasSize = Size()
 

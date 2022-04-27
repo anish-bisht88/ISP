@@ -20,8 +20,8 @@ class InteractionLayer : Layer {
         
         
         insert(entity: handHandler.playerHands, at: .front)
-        insert(entity: handHandler.playerHands.rightHand, at: .front)
-        insert(entity: handHandler.playerHands.leftHand, at: .front)
+        insert(entity: handHandler.playerHands.hands[0], at: .front)
+        insert(entity: handHandler.playerHands.hands[1], at: .front)
 
         insert(entity: handHandler.opponentHands, at: .front)
         insert(entity: handHandler.opponentHands.rightHand, at: .front)

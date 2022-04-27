@@ -6,7 +6,6 @@ class Hand : RenderableEntity {
 
     let hand : Image
     let imageSize = Size(width: 0, height: 0)
-    var fingers = 1
     let isRight : Bool
     
     var sourceRect = Rect()
@@ -14,7 +13,6 @@ class Hand : RenderableEntity {
     
     var isSelected = false
     var isUpdated = false
-    var isEnabled = false
     let upsideDown : Bool
 
     var originalPos = Point()
@@ -77,7 +75,7 @@ class Hand : RenderableEntity {
 
     func changeHand(_ n: Int) {
         sourceRect.topLeft.x = imageSize.width * n
-        fingers = n
+        isUpdated = false
     }
 
     func move(_ point: Point) {

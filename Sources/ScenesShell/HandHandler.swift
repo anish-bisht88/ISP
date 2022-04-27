@@ -8,6 +8,8 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     let opponentHands = OpponentHands(type: "test")
 
     static var playersJoined = [false, false]
+    static var hands = [[1, 1], [1, 1]]
+    static var updateNeeded = true
 
     enum PlayerType : Int {
         case playerOne
@@ -15,9 +17,11 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
         case spectator
     }
 
-    var isTurn = false
 
+
+    var isTurn = false
     var player = PlayerType.spectator
+    static var currentPlayer = PlayerType.playerOne
 
     init() {
         playerCheck: for index in 0..<HandHandler.playersJoined.count {
@@ -32,30 +36,45 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     }
 
     func onEntityMouseClick(globalLocation:Point) {
-        print("isTurn: \(isTurn)")
         if isTurn {
-            let rightHandContainment = playerHands.rightHand.destRect.containment(target: globalLocation)
-            let leftHandContainment = playerHands.leftHand.destRect.containment(target: globalLocation)
-            if setContainsSet(rightHandContainment, [.containedFully]) && !playerHands.rightHand.isSelected {
-                playerHands.rightHand.isSelected = true
-                playerHands.leftHand.reset()
-            } else if setContainsSet(leftHandContainment, [.containedFully]) && !playerHands.leftHand.isSelected {
-                playerHands.leftHand.isSelected = true
-                playerHands.rightHand.reset()
-            } else {
-                playerHands.leftHand.reset()
-                playerHands.rightHand.reset()
+            let rightHandContainment = playerHands.hands[1].destRect.containment(target: globalLocation)
+            let leftHandContainment = playerHands.hands[0].destRect.containment(target: globalLocation)
+            
+            if rightHandContainment.contains(.containedFully) && !playerHands.hands[1].isSelected { // click on right hand
+                playerHands.selectRight()
+            } else if leftHandContainment.contains(.containedFully) && !playerHands.hands[0].isSelected { // click on left hand
+                playerHands.selectLeft()
+            } else if let selectedHand = playerHands.selectedHand {
+                let opponentRightHandContainment = opponentHands.rightHand.destRect.containment(target: globalLocation)
+                let opponentLeftHandContainment = opponentHands.leftHand.destRect.containment(target: globalLocation)
+                if opponentRightHandContainment.contains(.containedFully) {
+                    addToOpponent(to: 1, amount: playerHands.fingers[selectedHand])
+                } else if opponentLeftHandContainment.contains(.containedFully) {
+                    addToOpponent(to: 0, amount: playerHands.fingers[selectedHand])
+                } else {
+                playerHands.deselectAll()
+                }
             }
         }
-        
+    }
+
+    func addToOpponent(to hand: Int, amount: Int) {
+        switch player {
+        case .playerOne:
+            HandHandler.hands[1][hand] += amount
+            HandHandler.hands[1][hand] %= 5
+        case .playerTwo:
+            HandHandler.hands[0][hand] += amount
+            HandHandler.hands[0][hand] %= 5
+        default:
+            fatalError("Cannot add to opponent as spectator")
+        }
     }
 
     func onMouseMove(globalLocation:Point, movement:Point) {
-        if playerHands.rightHand.isSelected {
-            playerHands.rightHand.move(globalLocation)
-        } else if playerHands.leftHand.isSelected {
-            playerHands.leftHand.move(globalLocation)
-        }
+        if let selectedHand = playerHands.selectedHand {
+            playerHands.hands[selectedHand].move(globalLocation)
+        } 
     }
 
     override func setup(canvasSize: Size, canvas: Canvas) {
@@ -67,6 +86,8 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
             isTurn = false
         }
     }
+
+    
 
     func setContainsSet(_ set: ContainmentSet, _ elements: ContainmentSet) -> Bool {
         return set.intersection(elements) == (elements)
