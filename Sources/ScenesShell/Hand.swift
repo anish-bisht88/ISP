@@ -6,21 +6,18 @@ class Hand : RenderableEntity {
 
     let hand : Image
     let imageSize = Size(width: 0, height: 0)
-    let isRight : Bool
     
     var sourceRect = Rect()
     var destRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 100, height: 100))
     
     var isSelected = false
     var isUpdated = false
-    let upsideDown : Bool
 
     var originalPos = Point()
+    let positionRatio : [Double]
 
-    init(type: String, isRight: Bool, upsideDown : Bool = false) {
-        self.upsideDown = upsideDown
-        self.isRight = isRight
-        let imageSize = GlobalVars.imageSize
+    init(type: String, positionRatio: [Double]) {
+        self.positionRatio = positionRatio
         switch type {
         case "minion":
             guard let handURL = URL(string: "") else {
@@ -50,10 +47,11 @@ class Hand : RenderableEntity {
         default:
             fatalError("Invalid skin color given")
         }
-        sourceRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: imageSize.width, height: imageSize.height))
+        let imageSize = Global.imageSize
+        sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
         super.init(name:"Hand")
     }
-
+    
     override func render(canvas: Canvas) {
         if !isUpdated && hand.isReady {
             hand.renderMode = .sourceAndDestination(sourceRect: sourceRect, destinationRect: destRect)
@@ -63,13 +61,8 @@ class Hand : RenderableEntity {
     
     override func setup(canvasSize: Size, canvas: Canvas) {
         canvas.setup(hand)
-        changeHand(1)
-        if !upsideDown {
-            originalPos = Point(x: (canvasSize.width/3)*(isRight ? 2 : 1), y: 3*canvasSize.height/4)
-        } else {
-            originalPos = Point(x: (canvasSize.width/3)*(isRight ? 2 : 1), y: canvasSize.height/4)
-        }
-        
+        originalPos = Point(x: Int(Double(canvasSize.width)*positionRatio[0]), y: Int(Double(canvasSize.height)*positionRatio[1]))
+        changeHand(1)        
         move(originalPos)
     }
 

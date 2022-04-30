@@ -1,4 +1,4 @@
-import Scenes
+/*import Scenes
 import Igis
 import Foundation
 
@@ -44,3 +44,4 @@ class PlayerHands : RenderableEntity {
 
 
 }
+*/

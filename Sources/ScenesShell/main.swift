@@ -6,8 +6,18 @@ import Igis
  It rarely needs to be altered.
  */
 
-struct GlobalVars {
-    static let imageSize = Size(width: 256, height: 256)
+enum Global {
+    static let imageSize = Size(width: 300, height: 300)
+    enum PlayerHand : Int {
+        case leftHand
+        case rightHand
+    }
+    enum PlayerType : Int {
+        case playerOne
+        case playerTwo
+        case spectator
+    }
+
 }
 
 print("Starting...")

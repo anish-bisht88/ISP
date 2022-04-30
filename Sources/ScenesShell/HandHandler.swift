@@ -1,4 +1,4 @@
-import Scenes
+/*import Scenes
 import Igis
 import Foundation
 
@@ -7,26 +7,15 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     let playerHands = PlayerHands(type: "test")
     let opponentHands = OpponentHands(type: "test")
 
-    static var playersJoined = [false, false]
-    static var hands = [[1, 1], [1, 1]]
-    static var updateNeeded = true
-
-    enum PlayerType : Int {
-        case playerOne
-        case playerTwo
-        case spectator
-    }
-
-
-
     var isTurn = false
-    var player = PlayerType.spectator
-    static var currentPlayer = PlayerType.playerOne
+    var player = Global.PlayerType.spectator
+    static var currentPlayer = Global.PlayerType.playerOne
+    static var playersJoined = [false, false]
 
     init() {
         playerCheck: for index in 0..<HandHandler.playersJoined.count {
             if !HandHandler.playersJoined[index] {
-                self.player = PlayerType(rawValue: index)!
+                self.player = Global.PlayerType(rawValue: index)!
                 HandHandler.playersJoined[index] = true
                 break playerCheck
             }
@@ -44,7 +33,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                 playerHands.selectRight()
             } else if leftHandContainment.contains(.containedFully) && !playerHands.hands[0].isSelected { // click on left hand
                 playerHands.selectLeft()
-            } else if let selectedHand = playerHands.selectedHand {
+            } else if let selectedHand = playerHands.selectedHand { 
                 let opponentRightHandContainment = opponentHands.rightHand.destRect.containment(target: globalLocation)
                 let opponentLeftHandContainment = opponentHands.leftHand.destRect.containment(target: globalLocation)
                 if opponentRightHandContainment.contains(.containedFully) {
@@ -59,16 +48,18 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     }
 
     func addToOpponent(to hand: Int, amount: Int) {
+        /*
         switch player {
         case .playerOne:
-            HandHandler.hands[1][hand] += amount
+            HandHandler.hands[][hand] += amount
             HandHandler.hands[1][hand] %= 5
         case .playerTwo:
             HandHandler.hands[0][hand] += amount
             HandHandler.hands[0][hand] %= 5
         default:
             fatalError("Cannot add to opponent as spectator")
-        }
+            }
+         */
     }
 
     func onMouseMove(globalLocation:Point, movement:Point) {
@@ -108,3 +99,4 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
 
 }
 
+*/
