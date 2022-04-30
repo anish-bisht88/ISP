@@ -18,8 +18,10 @@ class InteractionLayer : Layer {
 
         // We insert our RenderableEntities in the constructor
         
-        insert(entity: NewHandHandler.leftHands, at: .front)
-        insert(entity: NewHandHandler.rightHands, at: .front)
+        insert(entity: LeftHands.leftHand, at: .front)
+        insert(entity: LeftHands.rightHand, at: .front)
+        insert(entity: RightHands.leftHand, at: .front)
+        insert(entity: RightHands.rightHand, at: .front)
         insert(entity: handHandler, at: .front)
             
         /*insert(entity: handHandler.playerHands, at: .front)
@@ -31,6 +33,8 @@ class InteractionLayer : Layer {
         insert(entity: handHandler.opponentHands.leftHand, at: .front)
 
         insert(entity: handHandler, at: .front)*/
-        
+    }
+
+    override func preTeardown() {
     }
 }
