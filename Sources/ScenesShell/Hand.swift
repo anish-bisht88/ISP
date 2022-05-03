@@ -18,6 +18,8 @@ class Hand : RenderableEntity {
 
     let initialNumber : Int
 
+    var frame = 0
+
     init(type: String, positionRatio: [Double], initialNumber : Int = 1) {
         self.initialNumber = initialNumber
         self.positionRatio = positionRatio
@@ -51,9 +53,15 @@ class Hand : RenderableEntity {
             fatalError("Invalid skin color given")
         }
         let imageSize = Global.imageSize
+        sourceRect.topLeft = Point.zero
         sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
         super.init(name:"Hand")
         print("creating new hand with positionRatio \(positionRatio)")
+    }
+
+    override func calculate(canvasSize: Size) {
+        print("\(sourceRect.topLeft)")p
+        self.changeHand(Int.random(in: 0..<5))
     }
     
     override func render(canvas: Canvas) {
@@ -71,7 +79,8 @@ class Hand : RenderableEntity {
     }
 
     func changeHand(_ n: Int) {
-        sourceRect.topLeft.x = imageSize.width * 4
+        print("changing hand to \(n), new x: \(sourceRect.size.width*n/5)")
+        sourceRect.topLeft.x = sourceRect.size.width*n/5
         isUpdated = false
     }
 

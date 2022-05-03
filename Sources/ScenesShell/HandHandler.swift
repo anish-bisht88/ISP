@@ -21,6 +21,8 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     static var joinedPlayers = [false, false]
     static var joinedPlayerIDs = [0, 1]
 
+    var activeState = false
+
     
     init() {
         playerID = HandHandler.players
@@ -63,10 +65,11 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                     HandHandler.round += 1
                 }
             }
+            if !alreadyReset {
+                handPairs[playerID].deselect()
+            }
         }
-        if !alreadyReset {
-            handPairs[playerID].deselect()
-        }
+        
     }
 
     func onMouseMove(globalLocation:Point, movement:Point) {
@@ -79,6 +82,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
 
 
     override func calculate(canvasSize: Size) {
+        activeState = HandHandler.activePlayer == playerID
         if HandHandler.activePlayer == playerID {
             for index  in 0..<handPairs[HandHandler.activePlayer].hands.count {
                 HandHandler.handPositions[HandHandler.activePlayer][index] = handPairs[HandHandler.activePlayer].hands[index].destRect.topLeft
@@ -97,10 +101,11 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
 
     override func render(canvas: Canvas) {
         if let canvasSize = canvas.canvasSize {
-            let text = Text(location: canvasSize.center, text: "player \(playerID), round \(HandHandler.round), activePlayer \(HandHandler.activePlayer)")
+            let text = Text(location: canvasSize.center-Point(x: 200, y: 0), text: "you\(playerID), active\(HandHandler.activePlayer), isActive: \(HandHandler.activePlayer == playerID)")
+            let text2 = Text(location: Point.zero + Point(x: 100, y: 100), text: "handPos:\(HandHandler.handPositions)")
             text.font = "12pt Arial"
             let fillStyle = FillStyle(color: Color(.black))
-            canvas.render(fillStyle, text)
+            canvas.render(fillStyle, text, text2)
         }
     }
 
