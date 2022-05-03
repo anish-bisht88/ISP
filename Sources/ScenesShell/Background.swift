@@ -12,6 +12,7 @@ class Background : RenderableEntity, KeyDownHandler {
     var minionState = 0
     var minionKeys = ["m", "i", "n", "i", "o", "n", "1", "7", "3", "8"]
     let minionImage : Image
+    let bananaAudio : Audio
     var minionDrawn = false
 
     var clearRect = Rect()
@@ -25,6 +26,15 @@ class Background : RenderableEntity, KeyDownHandler {
         }
         minionImage = Image(sourceURL: minionImageURL)
 
+        guard let bananaAudioURL = URL(string:"https://www.codermerlin.com/users/anish-bisht/minions2.mp3") else{
+            fatalError("Could not get bananaImage")
+        }
+        bananaAudio = Audio(sourceURL: bananaAudioURL, shouldLoop: true) 
+
+
+
+
+        
         clearRectangle = Rectangle(rect: clearRect, fillMode: .fill)
         
         // Using a meaningful name can be helpful for debugging
@@ -38,7 +48,7 @@ class Background : RenderableEntity, KeyDownHandler {
         clearRect = Rect(topLeft: Point(x: 0, y: 0), size: canvasSize)
         clearRectangle = Rectangle(rect: clearRect, fillMode: .fill)
         canvas.setup(minionImage)
-
+        canvas.setup(bananaAudio)
     }
 
     override func teardown() {
@@ -47,10 +57,15 @@ class Background : RenderableEntity, KeyDownHandler {
 
     override func render(canvas: Canvas) {
         canvas.render(whiteFill, clearRectangle)
-        if minionImage.isReady && minionState == minionKeys.count {
+        var isBackgroundPlaying = false
+       
+
+        if minionImage.isReady && minionState == minionKeys.count && !isBackgroundPlaying && bananaAudio.isReady{
              minionImage.renderMode = .destinationPoint(Point(x:100, y:200))
              canvas.render(minionImage)
              minionDrawn = true
+             canvas.render(bananaAudio)
+             isBackgroundPlaying = true
         }
         
     }
