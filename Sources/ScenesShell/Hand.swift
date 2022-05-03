@@ -16,7 +16,10 @@ class Hand : RenderableEntity {
     var originalPos = Point()
     let positionRatio : [Double]
 
-    init(type: String, positionRatio: [Double]) {
+    let initialNumber : Int
+
+    init(type: String, positionRatio: [Double], initialNumber : Int = 1) {
+        self.initialNumber = initialNumber
         self.positionRatio = positionRatio
         switch type {
         case "minion":
@@ -50,10 +53,11 @@ class Hand : RenderableEntity {
         let imageSize = Global.imageSize
         sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
         super.init(name:"Hand")
+        print("creating new hand with positionRatio \(positionRatio)")
     }
     
     override func render(canvas: Canvas) {
-        if !isUpdated && hand.isReady {
+        if hand.isReady { //&& !isUpdated {
             hand.renderMode = .sourceAndDestination(sourceRect: sourceRect, destinationRect: destRect)
             canvas.render(hand)
         }
@@ -62,17 +66,18 @@ class Hand : RenderableEntity {
     override func setup(canvasSize: Size, canvas: Canvas) {
         canvas.setup(hand)
         originalPos = Point(x: Int(Double(canvasSize.width)*positionRatio[0]), y: Int(Double(canvasSize.height)*positionRatio[1]))
-        changeHand(1)        
+        changeHand(initialNumber)        
         move(originalPos)
     }
 
     func changeHand(_ n: Int) {
-        sourceRect.topLeft.x = imageSize.width * n
+        sourceRect.topLeft.x = imageSize.width * 4
         isUpdated = false
     }
 
     func move(_ point: Point) {
         destRect.topLeft = point - Point(x: destRect.size.width/2, y: destRect.size.height/2)
+        isUpdated = false
     }
 
     func reset() {

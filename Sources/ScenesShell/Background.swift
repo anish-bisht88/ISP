@@ -46,23 +46,24 @@ class Background : RenderableEntity, KeyDownHandler {
     }
 
     override func render(canvas: Canvas) {
+        canvas.render(whiteFill, clearRectangle)
         if minionImage.isReady && minionState == minionKeys.count {
              minionImage.renderMode = .destinationPoint(Point(x:100, y:200))
              canvas.render(minionImage)
              minionDrawn = true
         }
-        canvas.render(whiteFill, clearRectangle)
+        
     }
 
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         if !minionDrawn {
-            if key == minionKeys[minionState] {
+            if (minionState-1 <= minionKeys.count)&&(key == minionKeys[minionState]) {
                 minionState += 1
-                print("state: \(minionState), next letter: \(minionKeys[minionState]), total: \(minionKeys.count)")
             } else {
                 minionState = 0
             }
         }
+        print(minionState, minionDrawn)
         
     }
 }
