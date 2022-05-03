@@ -60,7 +60,7 @@ class Hand : RenderableEntity {
     }
 
     override func calculate(canvasSize: Size) {
-        print("\(sourceRect.topLeft)")p
+        print("\(sourceRect.topLeft)")
         self.changeHand(Int.random(in: 0..<5))
     }
     
