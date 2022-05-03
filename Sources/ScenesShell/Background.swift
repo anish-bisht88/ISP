@@ -13,6 +13,7 @@ class Background : RenderableEntity, KeyDownHandler {
     var minionKeys = ["m", "i", "n", "i", "o", "n", "1", "7", "3", "8"]
     let minionImage : Image
     let bananaAudio : Audio
+    let onSightAudio : Audio
     var minionDrawn = false
 
     var clearRect = Rect()
@@ -31,8 +32,10 @@ class Background : RenderableEntity, KeyDownHandler {
         }
         bananaAudio = Audio(sourceURL: bananaAudioURL, shouldLoop: true) 
 
-
-
+        guard let onSightAudioURL = URL(string:"https://codermerlin.com/users/anish-bisht/onsight.mp3") else{
+            fatalError("Could not get bananaImage")
+        }
+        onSightAudio = Audio(sourceURL: onSightAudioURL, shouldLoop: true)  
 
         
         clearRectangle = Rectangle(rect: clearRect, fillMode: .fill)
@@ -49,6 +52,7 @@ class Background : RenderableEntity, KeyDownHandler {
         clearRectangle = Rectangle(rect: clearRect, fillMode: .fill)
         canvas.setup(minionImage)
         canvas.setup(bananaAudio)
+        canvas.setup(onSightAudio)
     }
 
     override func teardown() {
@@ -58,6 +62,10 @@ class Background : RenderableEntity, KeyDownHandler {
     override func render(canvas: Canvas) {
         canvas.render(whiteFill, clearRectangle)
         var isBackgroundPlaying = false
+        if !isBackgroundPlaying && onSightAudio.isReady{
+             canvas.render(onSightAudio)
+             isBackgroundPlaying = true
+        }
        
 
         if minionImage.isReady && minionState == minionKeys.count && !isBackgroundPlaying && bananaAudio.isReady{
