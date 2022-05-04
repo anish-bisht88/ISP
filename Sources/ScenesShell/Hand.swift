@@ -5,7 +5,7 @@ import Foundation
 class Hand : RenderableEntity {
 
     let hand : Image
-    let imageSize = Size(width: 0, height: 0)
+    var imageSize = Size()
     
     var sourceRect = Rect()
     var destRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 100, height: 100))
@@ -52,16 +52,10 @@ class Hand : RenderableEntity {
         default:
             fatalError("Invalid skin color given")
         }
-        let imageSize = Global.imageSize
+        imageSize = Global.imageSize
         sourceRect.topLeft = Point.zero
         sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
         super.init(name:"Hand")
-        print("creating new hand with positionRatio \(positionRatio)")
-    }
-
-    override func calculate(canvasSize: Size) {
-        print("\(sourceRect.topLeft)")
-        self.changeHand(Int.random(in: 0..<5))
     }
     
     override func render(canvas: Canvas) {
@@ -78,9 +72,11 @@ class Hand : RenderableEntity {
         move(originalPos)
     }
 
-    func changeHand(_ n: Int) {
-        print("changing hand to \(n), new x: \(sourceRect.size.width*n/5)")
-        sourceRect.topLeft.x = sourceRect.size.width*n/5
+    func changeHand(_ n: Int, debug: Bool = false) {
+        sourceRect.topLeft.x = sourceRect.size.width*n
+        if debug {
+            print("changing hand to \(n), newPos: \(sourceRect.topLeft)")
+        }
         isUpdated = false
     }
 

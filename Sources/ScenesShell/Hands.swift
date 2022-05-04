@@ -5,6 +5,8 @@ class Hands : RenderableEntity {
     let hands : [Hand]
     var selectedHand : Int? = nil
 
+    var handValues = [1, 1]
+    
     init(type: String, positionRatios: [[Double]], initialNumbers : [Int] = [1, 1]) {
         var tempArray = [Hand]()
         for index  in 0..<positionRatios.count {
@@ -23,6 +25,12 @@ class Hands : RenderableEntity {
                 hands[index].reset()
             }
         }
+    }
+
+    func add (_ n: Int, to handIndex: Int) {
+        precondition(handIndex < hands.count && handIndex >= 0, "given value does not correspond to a hand")
+        self.handValues[handIndex] = (self.handValues[handIndex]+n)%5
+        self.hands[handIndex].changeHand(self.handValues[handIndex], debug: true)
     }
 
     func deselect() {

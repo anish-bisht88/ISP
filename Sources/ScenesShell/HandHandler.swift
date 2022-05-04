@@ -4,13 +4,14 @@ import Foundation
 
 class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler {
 
-    //make the below arrays !!
+    //make it default to original position when it's not the active player
 
 
-    let handPairs = [Hands(type: "test", positionRatios: [[0.25, 0.25], [0.25, 0.75]], initialNumbers: [0, 1]), Hands(type: "test", positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [2, 3])]
+    let handPairs = [Hands(type: "test", positionRatios: [[0.25, 0.25], [0.25, 0.75]], initialNumbers: [1, 1]), Hands(type: "test", positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [1,1])]
     static var activePlayer = 0
     static var handPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
-    static var originalHandPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
+    static var originalhandPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
+    static var handValues = Array(repeating: Array(repeating: 1, count: 2), count: 2)
 
 
     static var players = 0
@@ -21,7 +22,6 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     static var joinedPlayers = [false, false]
     static var joinedPlayerIDs = [0, 1]
 
-    var activeState = false
 
     
     init() {
@@ -40,30 +40,45 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     override func setup(canvasSize: Size, canvas: Canvas) {
         dispatcher.registerEntityMouseClickHandler(handler:self)
         dispatcher.registerMouseMoveHandler(handler:self)
+        if playerID == HandHandler.activePlayer {
+            for playerIndex in 0..<handPairs.count {
+                for handIndex in 0..<handPairs[playerIndex].hands.count {
+                    HandHandler.originalhandPositions[playerIndex][handIndex] = handPairs[playerIndex].hands[handIndex].destRect.topLeft
+                }
+            }
+        }
     }
 
     func onEntityMouseClick(globalLocation:Point) {
         var alreadyReset = false
         if HandHandler.activePlayer == playerID {
-            let otherPlayer = other(playerID)
-            playerHandCheck:  for index in 0..<handPairs[playerID].hands.count {
-                let containment = handPairs[playerID].hands[index].destRect.containment(target: globalLocation)
-                if containment.contains(.containedFully) && !handPairs[playerID].hands[index].isSelected  {
-                    handPairs[playerID].select(index)
-                    print("selected hand", index)
-                    alreadyReset = true
+            decideAction: do {
+                let otherPlayer = other(playerID)
+                playerHandCheck:  for index in 0..<handPairs[playerID].hands.count {
+                    let containment = handPairs[playerID].hands[index].destRect.containment(target: globalLocation)
+                    if containment.contains(.containedFully) && !handPairs[playerID].hands[index].isSelected  {
+                        handPairs[playerID].select(index)
+                        print("selected hand", index)
+                        alreadyReset = true
+                        break decideAction
+                    }
                 }
-            }
-            opponenthandCheck: for index in 0..<handPairs[otherPlayer].hands.count {
-                let containment = handPairs[otherPlayer].hands[index].destRect.containment(target: globalLocation)
-                if containment.contains(.containedFully) {
-                    //placeholder add to hand
-                    print("tapped opponent")
-                    handPairs[playerID].deselect()
-                    alreadyReset = true
-                    HandHandler.activePlayer = otherPlayer
-                    HandHandler.round += 1
+                if let selectedHand = handPairs[playerID].selectedHand {
+                    opponenthandCheck: for index in 0..<handPairs[otherPlayer].hands.count {
+                        let containment = handPairs[otherPlayer].hands[index].destRect.containment(target: globalLocation)
+                        if containment.contains(.containedFully) {
+                            handPairs[otherPlayer].add(handPairs[playerID].handValues[selectedHand], to: index)
+                            HandHandler.handValues[otherPlayer][index] = handPairs[otherPlayer].handValues[index]
+                            print("tapped opponent")
+                            handPairs[playerID].deselect()
+                            alreadyReset = true
+                            HandHandler.activePlayer = otherPlayer
+                            HandHandler.round += 1
+                            break decideAction
+                        }
+                    }
                 }
+                
             }
             if !alreadyReset {
                 handPairs[playerID].deselect()
@@ -82,17 +97,18 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
 
 
     override func calculate(canvasSize: Size) {
-        activeState = HandHandler.activePlayer == playerID
-        if HandHandler.activePlayer == playerID {
-            for index  in 0..<handPairs[HandHandler.activePlayer].hands.count {
-                HandHandler.handPositions[HandHandler.activePlayer][index] = handPairs[HandHandler.activePlayer].hands[index].destRect.topLeft
+        if HandHandler.activePlayer == playerID { //if you are the player update global position and fingers to your values
+            for index  in 0..<handPairs[playerID].hands.count {
+                HandHandler.handPositions[playerID][index] = handPairs[playerID].hands[index].destRect.topLeft
+                HandHandler.handValues[playerID] = handPairs[playerID].handValues
             }
             
         }
-        else {
+        else { //otherwise get the global values and use them
             for playerIndex in 0..<handPairs.count {
-                for index in 0..<handPairs[playerIndex].hands.count {
-                    HandHandler.handPositions[playerID][index] = HandHandler.handPositions[playerID][index]
+                for handIndex in 0..<handPairs[playerIndex].hands.count {
+                    handPairs[playerIndex].hands[handIndex].move(HandHandler.handPositions[playerIndex][handIndex])
+                    handPairs[playerIndex].hands[handIndex].changeHand(HandHandler.handValues[playerIndex][handIndex])
                 }
             }
         }
@@ -103,9 +119,10 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
         if let canvasSize = canvas.canvasSize {
             let text = Text(location: canvasSize.center-Point(x: 200, y: 0), text: "you\(playerID), active\(HandHandler.activePlayer), isActive: \(HandHandler.activePlayer == playerID)")
             let text2 = Text(location: Point.zero + Point(x: 100, y: 100), text: "handPos:\(HandHandler.handPositions)")
+            let text3 = Text(location: Point.zero + Point(x: 100, y: 200), text: "handValues:\(HandHandler.handValues)")
             text.font = "12pt Arial"
             let fillStyle = FillStyle(color: Color(.black))
-            canvas.render(fillStyle, text, text2)
+            canvas.render(fillStyle, text, text2, text3)
         }
     }
 
