@@ -12,9 +12,11 @@ class Background : RenderableEntity, KeyDownHandler {
     var minionState = 0
     var minionKeys = ["m", "i", "n", "i", "o", "n", "1", "7", "3", "8"]
     let minionImage : Image
+    var minionDrawn = false
+    
     let bananaAudio : Audio
     let onSightAudio : Audio
-    var minionDrawn = false
+    var isBackgroundPlaying = false
 
     var clearRect = Rect()
     var clearRectangle : Rectangle
@@ -48,7 +50,7 @@ class Background : RenderableEntity, KeyDownHandler {
 
     override func setup(canvasSize: Size, canvas: Canvas) {
         dispatcher.registerKeyDownHandler(handler: self)
-        clearRect = Rect(topLeft: Point(x: 0, y: 0), size: canvasSize)
+        clearRect = Rect(topLeft: Point.zero, size: canvasSize)
         clearRectangle = Rectangle(rect: clearRect, fillMode: .fill)
         canvas.setup(minionImage)
         canvas.setup(bananaAudio)
@@ -61,18 +63,16 @@ class Background : RenderableEntity, KeyDownHandler {
 
     override func render(canvas: Canvas) {
         canvas.render(whiteFill, clearRectangle)
-        var isBackgroundPlaying = false
         if !isBackgroundPlaying && onSightAudio.isReady{
              canvas.render(onSightAudio)
              isBackgroundPlaying = true
         }
        
 
-        if minionImage.isReady && minionState == minionKeys.count && !isBackgroundPlaying && bananaAudio.isReady{
+        if minionImage.isReady && bananaAudio.isReady && minionState == minionKeys.count {
              minionImage.renderMode = .destinationPoint(Point(x:100, y:200))
-             canvas.render(minionImage)
+             canvas.render(minionImage, bananaAudio)
              minionDrawn = true
-             canvas.render(bananaAudio)
              isBackgroundPlaying = true
         }
         
