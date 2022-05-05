@@ -7,7 +7,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     //make it default to original position when it's not the active player
 
 
-    let handPairs = [Hands(type: "test", positionRatios: [[0.25, 0.25], [0.25, 0.75]], initialNumbers: [1, 1]), Hands(type: "test", positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [1,1])]
+    let handPairs = [Hands(type: "kenttest", positionRatios: [[0.25, 0.25], [0.25, 0.75]], initialNumbers: [1, 1]), Hands(type: "kenttest", positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [1,1])]
     static var activePlayer = 0
     static var handPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
     static var originalHandPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
@@ -58,7 +58,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                 let otherPlayer = other(playerID)
                 playerHandCheck:  for index in 0..<handPairs[playerID].hands.count {
                     let containment = handPairs[playerID].hands[index].destRect.containment(target: globalLocation)
-                    if containment.contains(.containedFully) && !handPairs[playerID].hands[index].isSelected  {
+                    if containment.contains(.containedFully) && !handPairs[playerID].hands[index].isSelected && !(HandHandler.handValues[playerID][index] == 0)  {
                         handPairs[playerID].select(index)
                         print("selected hand", index)
                         alreadyReset = true

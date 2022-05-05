@@ -50,10 +50,17 @@ class Hand : RenderableEntity {
                 fatalError("Failed to create URL for test hand")
             }
             hand = Image(sourceURL: handURL)
+            imageSize = Global.imageSize
+        case "kenttest":
+            guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/kenthand.png") else {
+                fatalError("failed to create URL for kent test hand")
+            }
+            imageSize = Global.kentImageSize
+            hand = Image(sourceURL: handURL)
         default:
             fatalError("Invalid skin color given")
         }
-        imageSize = Global.imageSize
+        
         sourceRect.topLeft = Point.zero
         sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
         super.init(name:"Hand")
