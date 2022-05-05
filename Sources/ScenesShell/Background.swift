@@ -70,10 +70,11 @@ class Background : RenderableEntity, KeyDownHandler {
        
 
         if minionImage.isReady && bananaAudio.isReady && minionState == minionKeys.count {
-             minionImage.renderMode = .destinationPoint(Point(x:100, y:200))
-             canvas.render(minionImage, bananaAudio)
-             minionDrawn = true
-             isBackgroundPlaying = true
+            onSightAudio.mode = .pause
+            minionImage.renderMode = .destinationPoint(Point(x:100, y:200))
+            canvas.render(onSightAudio, minionImage, bananaAudio)
+            minionDrawn = true
+            isBackgroundPlaying = true
         }
         
     }
