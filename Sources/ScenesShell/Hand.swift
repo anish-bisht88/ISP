@@ -9,9 +9,10 @@ class Hand : RenderableEntity {
     
     var sourceRect = Rect()
     var destRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 100, height: 100))
+    var globalLocation = Point()
     
     var isSelected = false
-    var isUpdated = false
+    var isOut = false
 
     var originalPos = Point()
     let positionRatio : [Double]
@@ -59,7 +60,7 @@ class Hand : RenderableEntity {
     }
     
     override func render(canvas: Canvas) {
-        if hand.isReady { //&& !isUpdated {
+        if hand.isReady {
             hand.renderMode = .sourceAndDestination(sourceRect: sourceRect, destinationRect: destRect)
             canvas.render(hand)
         }
@@ -77,12 +78,11 @@ class Hand : RenderableEntity {
         if debug {
             print("changing hand to \(n), newPos: \(sourceRect.topLeft)")
         }
-        isUpdated = false
     }
 
     func move(_ point: Point) {
+        globalLocation = point
         destRect.topLeft = point - Point(x: destRect.size.width/2, y: destRect.size.height/2)
-        isUpdated = false
     }
 
     func reset() {

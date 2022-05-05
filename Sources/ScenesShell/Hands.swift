@@ -31,6 +31,9 @@ class Hands : RenderableEntity {
         precondition(handIndex < hands.count && handIndex >= 0, "given value does not correspond to a hand")
         self.handValues[handIndex] = (self.handValues[handIndex]+n)%5
         self.hands[handIndex].changeHand(self.handValues[handIndex], debug: true)
+        if handValues[handIndex] == 0 {
+            self.hands[handIndex].isOut = true
+        }
     }
 
     func deselect() {
