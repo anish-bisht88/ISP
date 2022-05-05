@@ -86,7 +86,5 @@ class Background : RenderableEntity, KeyDownHandler {
                 minionState = 0
             }
         }
-        print(minionState, minionDrawn)
-        
     }
 }
