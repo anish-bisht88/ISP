@@ -6,6 +6,7 @@ class Hand : RenderableEntity {
 
     let hand : Image
     var imageSize = Size()
+    let rotation : Transform
     
     var sourceRect = Rect()
     var destRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 100, height: 100))
@@ -21,7 +22,8 @@ class Hand : RenderableEntity {
 
     var frame = 0
 
-    init(type: String, positionRatio: [Double], initialNumber : Int = 1) {
+    init(type: String, positionRatio: [Double], initialNumber : Int = 1, rotation : Double = 0.0) {
+        self.rotation = Transform(rotateRadians: rotation, mode: .toIdentity)
         self.initialNumber = initialNumber
         self.positionRatio = positionRatio
         switch type {

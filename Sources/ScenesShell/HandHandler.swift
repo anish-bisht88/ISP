@@ -7,7 +7,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     //make it default to original position when it's not the active player
 
 
-    let handPairs = [Hands(type: "kenttest", positionRatios: [[0.25, 0.25], [0.25, 0.75]], initialNumbers: [1, 1]), Hands(type: "kenttest", positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [1,1])]
+    let handPairs = [Hands(type: "kenttest", positionRatios: [[0.25, 0.25], [0.25, 0.75]], rotations: [Double.pi/12, Double.pi/6]), Hands(type: "kenttest", positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [1,1])]
     static var activePlayer = 0
     static var handPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
     static var originalHandPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
@@ -54,6 +54,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     func onEntityMouseClick(globalLocation:Point) {
         var alreadyReset = false
         if HandHandler.activePlayer == playerID {
+            print(handPairs[playerID].hands[0].applyTransforms(toPoint: globalLocation, transforms: [Transform(rotateRadians: Double.pi/24)]))
             decideAction: do {
                 let otherPlayer = other(playerID)
                 playerHandCheck:  for index in 0..<handPairs[playerID].hands.count {
@@ -66,6 +67,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                     }
                 }
                 if let selectedHand = handPairs[playerID].selectedHand {
+                    
                     opponenthandCheck: for index in 0..<handPairs[otherPlayer].hands.count {
                         let containment = handPairs[otherPlayer].hands[index].destRect.containment(target: globalLocation)
                         if containment.contains(.containedFully) && !(HandHandler.handValues[playerID][selectedHand] == 0){
