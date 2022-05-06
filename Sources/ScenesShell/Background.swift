@@ -57,10 +57,8 @@ class Background : RenderableEntity, KeyDownHandler {
         dispatcher.registerKeyDownHandler(handler: self)
         clearRect = Rect(topLeft: Point.zero, size: canvasSize)
         clearRectangle = Rectangle(rect: clearRect, fillMode: .fill)
-        canvas.setup(minionImage)
-        canvas.setup(bananaAudio)
-        canvas.setup(onSightAudio)
-        canvas.setup(backgroundImage)
+        canvas.setup(minionImage, bananaAudio)
+        canvas.setup(backgroundImage, onSightAudio)
     }
 
     override func teardown() {
@@ -71,7 +69,7 @@ class Background : RenderableEntity, KeyDownHandler {
         canvas.render(whiteFill, clearRectangle)
         if backgroundImage.isReady{
             backgroundImage.renderMode = .destinationRect(clearRect)
-
+            canvas.render(backgroundImage)
         }
         if !isBackgroundPlaying && onSightAudio.isReady{
              canvas.render(onSightAudio)
