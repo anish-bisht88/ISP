@@ -53,7 +53,7 @@ class Hand : RenderableEntity {
             }
             hand = Image(sourceURL: handURL)
             imageSize = Global.imageSize
-        case "kenttest":
+        case "kent":
             guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/kenthand.png") else {
                 fatalError("failed to create URL for kent test hand")
             }

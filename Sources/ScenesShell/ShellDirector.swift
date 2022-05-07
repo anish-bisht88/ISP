@@ -8,7 +8,7 @@ import Scenes
 class ShellDirector : Director {
     required init() {
         super.init()
-        enqueueScene(scene:MainScene())
+        enqueueScene(scene:MenuScene())
     }
 
     override func framesPerSecond() -> Int {

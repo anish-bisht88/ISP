@@ -9,6 +9,8 @@ import Igis
 enum Global {
     static let imageSize = Size(width: 256, height: 256)
     static let kentImageSize = Size(width: 600, height: 800)
+
+    static var playerSkins = [String?]()
         
     enum PlayerHand : Int {
         case leftHand
@@ -19,7 +21,10 @@ enum Global {
         case playerTwo
         case spectator
     }
+}
 
+struct Gameplay {
+    var x : Int
 }
 
 print("Starting...")
