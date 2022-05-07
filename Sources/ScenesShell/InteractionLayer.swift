@@ -24,8 +24,6 @@ class InteractionLayer : Layer {
         insert(entity: handHandler.handPairs[1].hands[0], at: .front)
         insert(entity: handHandler.handPairs[1].hands[1], at: .front)
         
-
-
         insert(entity: handHandler, at: .front)
     }
 }

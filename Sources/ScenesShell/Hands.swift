@@ -29,15 +29,27 @@ class Hands : RenderableEntity {
 
     func add (_ n: Int, to handIndex: Int) {
         precondition(handIndex < hands.count && handIndex >= 0, "given value does not correspond to a hand")
+        print("adding \(n) to hand \(handIndex), current value is \(self.handValues[handIndex])")
         self.handValues[handIndex] = (self.handValues[handIndex]+n)%5
-        self.hands[handIndex].changeHand(self.handValues[handIndex], debug: true)
+        if handValues[handIndex] == 0 {
+            self.hands[handIndex].isOut = true
+        }
+        print("new value is \(self.handValues[handIndex])")
+    }
+    
+    func subtract (_ n: Int, from handIndex: Int) {
+        precondition(handIndex < hands.count && handIndex >= 0, "given value does not correspond to a hand")
+        if (handValues[handIndex] == 0)||(n > handValues[handIndex]) {
+            return
+        }
+        print("subtracting \(n) from \(handIndex)")
+        self.handValues[handIndex] = (self.handValues[handIndex]-n)
         if handValues[handIndex] == 0 {
             self.hands[handIndex].isOut = true
         }
     }
 
     func deselect() {
-        print("returning hands to original positionballs")
         for index in 0..<hands.count {
             hands[index].reset()
         }

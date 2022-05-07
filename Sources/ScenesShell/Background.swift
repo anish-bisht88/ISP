@@ -7,7 +7,7 @@ import Foundation
  */
 
 
-class Background : RenderableEntity, KeyDownHandler {
+class Background : RenderableEntity {
 
     var minionState = 0
     var minionKeys = ["m", "i", "n", "i", "o", "n", "1", "7", "3", "8"]
@@ -54,15 +54,10 @@ class Background : RenderableEntity, KeyDownHandler {
     }
 
     override func setup(canvasSize: Size, canvas: Canvas) {
-        dispatcher.registerKeyDownHandler(handler: self)
         clearRect = Rect(topLeft: Point.zero, size: canvasSize)
         clearRectangle = Rectangle(rect: clearRect, fillMode: .fill)
         canvas.setup(minionImage, bananaAudio)
         canvas.setup(backgroundImage, onSightAudio)
-    }
-
-    override func teardown() {
-        dispatcher.unregisterKeyDownHandler(handler: self)
     }
 
     override func render(canvas: Canvas) {
@@ -87,7 +82,7 @@ class Background : RenderableEntity, KeyDownHandler {
         
     }
 
-    func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
+    public func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         if !minionDrawn {
             if (minionState-1 <= minionKeys.count)&&(key == minionKeys[minionState]) {
                 minionState += 1

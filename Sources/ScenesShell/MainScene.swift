@@ -1,4 +1,5 @@
 import Scenes
+import Igis
 
 /*
    This class is responsible for implementing a single Scene.
@@ -6,7 +7,7 @@ import Scenes
    A Scene is comprised of one or more Layers.
    Layers are generally added in the constructor.
  */
-class MainScene : Scene {
+class MainScene : Scene, KeyDownHandler {
 
     /* Scenes typically include one or more Layers.
        A common approach is to use three Layers:
@@ -26,5 +27,18 @@ class MainScene : Scene {
         insert(layer:backgroundLayer, at:.back)
         insert(layer:interactionLayer, at:.inFrontOf(object:backgroundLayer))
         insert(layer:foregroundLayer, at:.front)
+    }
+
+    override func preSetup(canvasSize: Size, canvas: Canvas) {
+        dispatcher.registerKeyDownHandler(handler: self)
+    }
+
+    override func postTeardown() {
+        dispatcher.unregisterKeyDownHandler(handler: self)
+    }
+    
+    func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
+        backgroundLayer.background.onKeyDown(key: key, code: code, ctrlKey: ctrlKey, shiftKey: shiftKey, altKey: altKey, metaKey: metaKey)
+        interactionLayer.handHandler.onKeyDown(key: key, code: code, ctrlKey: ctrlKey, shiftKey: shiftKey, altKey: altKey, metaKey: metaKey)
     }
 }
