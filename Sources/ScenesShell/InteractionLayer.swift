@@ -11,6 +11,10 @@ class InteractionLayer : Layer {
 
     let handHandler = HandHandler()
 
+    var time = 0
+    var endTime : Int? = nil
+    var winCondition = false
+    var gameOver = false
     
     init() {
         
@@ -25,5 +29,19 @@ class InteractionLayer : Layer {
         insert(entity: handHandler.handPairs[1].hands[1], at: .front)
         
         insert(entity: handHandler, at: .front)
+    }
+
+    override func preCalculate(canvas: Canvas) {
+        time += 1
+        if let winner = HandHandler.winner, !winCondition {
+            endTime = time
+            winCondition = true
+        }else if let endTime = self.endTime, !gameOver {
+            if time > 30+endTime {
+                remove(entity: handHandler)
+                gameOver = true
+                print("ending game...")
+            }
+        }
     }
 }

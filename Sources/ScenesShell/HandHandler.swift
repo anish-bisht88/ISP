@@ -20,8 +20,16 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     static var joinedPlayers = [false, false]
     static var joinedPlayerIDs = [0, 1]
 
+    static var winner : Int? = nil
 
-    
+    let statusText = Text(location: Point.zero, text:"", fillMode: .fillAndStroke)
+    let splitText = Text(location: Point.zero, text:"", fillMode: .fillAndStroke)
+    let fillStyle = FillStyle(color: Color(.white))
+    let strokeStyle = StrokeStyle(color: Color(.black))
+
+
+    let plusButton : Image
+    var plusRect = Rect()
     init() {
         playerID = HandHandler.players
         HandHandler.players += 1
@@ -32,7 +40,13 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                 break playerCheck
             }
         }
+        guard let plusButtonURL = URL(string: "https://codermerlin.com/users/anish-bisht/transparent.png") else {
+            fatalError("could not get the url for the plus button")
+        }
+        plusButton = Image(sourceURL: plusButtonURL)
+
         super.init(name: "Hand Handler")
+
     }
 
     override func setup(canvasSize: Size, canvas: Canvas) {
@@ -46,6 +60,16 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
             }
             HandHandler.handPositions = HandHandler.originalHandPositions
         }
+        splitText.location = Point(x: canvasSize.width/2, y: canvasSize.height/6)
+        splitText.font = "32pt Arial"
+        splitText.alignment = .center
+        splitText.text = "Amount to split: 1"
+        statusText.location = Point(x: canvasSize.center.x, y: canvasSize.height/10)
+        statusText.font = "48pt Arial"
+        statusText.alignment = .center
+        canvas.setup(plusButton)
+        plusRect = Rect(topLeft: Point(x: canvasSize.center.x-50, y: canvasSize.height/5), size: Size(width: 100, height: 100))
+        
     }
 
     func onEntityMouseClick(globalLocation:Point) {
@@ -60,7 +84,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                         alreadyReset = true
                         break decideAction
                     }
-                    else if containment.contains(.containedFully) && handPairs[playerID].hands[other(index)].isSelected && self.numberToSplit <= handPairs[playerID].handValues[other(index)]{
+                    else if containment.contains(.containedFully) && handPairs[playerID].hands[other(index)].isSelected && self.numberToSplit <= handPairs[playerID].handValues[other(index)] && self.numberToSplit != 0{
                         let selectedHand = other(index)
                         print("splitting \(self.numberToSplit)")
                         handPairs[playerID].subtract(self.numberToSplit, from: selectedHand)
@@ -70,7 +94,13 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                     }
                 }
                 if let selectedHand = handPairs[playerID].selectedHand {
-                    
+                    let plusButtonContainment = plusRect.containment(target: globalLocation)
+                    if plusButtonContainment.contains(.containedFully) {
+                        handPairs[playerID].add(1, to:selectedHand)
+                        self.syncHands(playerID)
+                        self.changeRound()
+                        break decideAction
+                    }
                     opponenthandCheck: for index in 0..<handPairs[otherPlayer].hands.count {
                         let containment = handPairs[otherPlayer].hands[index].destRect.containment(target: globalLocation)
                         if containment.contains(.containedFully) && (HandHandler.handValues[playerID][selectedHand] != 0) && (HandHandler.handValues[otherPlayer][index] != 0) {
@@ -88,6 +118,11 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
                 handPairs[playerID].deselect()
             }
             resetHands()
+            for index in 0..<HandHandler.handValues.count {
+                if HandHandler.handValues[index] == [0,0] {
+                    HandHandler.winner = index
+                }
+            }
         }
     }
 
@@ -101,6 +136,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
 
 
     override func calculate(canvasSize: Size) {
+        calculateStatus()
         for playerIndex in 0..<handPairs.count {
             handPairs[playerIndex].handValues = HandHandler.handValues[playerIndex]
             if playerIndex == HandHandler.activePlayer {
@@ -123,16 +159,12 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     
 
     override func render(canvas: Canvas) {
-        if let canvasSize = canvas.canvasSize {
-            let text = Text(location: canvasSize.center-Point(x: 200, y: 0), text: "you\(playerID), active\(HandHandler.activePlayer), isActive: \(HandHandler.activePlayer == playerID)")
-            let text2 = Text(location: canvasSize.center + Point(x: 100, y: 100), text: "handPos:\(HandHandler.handPositions)")
-            let text3 = Text(location: canvasSize.center + Point(x: 100, y: 200), text: "handValues:\(HandHandler.handValues)")
-            let text4 = Text(location: canvasSize.center + Point(x: 100, y: 250), text: "local handValues:\([handPairs[0].handValues, handPairs[1].handValues])")
-            let splitText = Text(location: Point(x: canvasSize.width/2, y: canvasSize.height/5), text: "Amount to split: \(self.numberToSplit)")
-            splitText.font = "12pt Arial"
-            splitText.alignment = .center
-            let fillStyle = FillStyle(color: Color(.black))
-            canvas.render(fillStyle, splitText, text, text2, text3, text4)
+        if plusButton.isReady {
+            plusButton.renderMode = .destinationRect(plusRect)
+            canvas.render(fillStyle, strokeStyle, statusText, plusButton)
+        }
+        if playerID == HandHandler.activePlayer {
+            canvas.render(fillStyle, strokeStyle, splitText) //text, text2, text3, text4)
         }
     }
 
@@ -145,12 +177,26 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     }
     
     public func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
-        print(key, code)
-        if let num = Int(key) {
+        if let num = Int(key), HandHandler.joinedPlayerIDs.contains(playerID){
             if num <= 5 && num > 0 {
                 self.numberToSplit = num
+                splitText.text = "Amount to split: \(self.numberToSplit)"
             }
         }
+    }
+
+    func calculateStatus() {
+        let text: String
+        switch playerID {
+        case HandHandler.activePlayer:
+            text = "Your turn (\(playerID == 0 ? "left" : "right"))"
+        case other(HandHandler.activePlayer):
+            text = "Opponent's turn (\(playerID != 0 ? "left" : "right"))"
+        default:
+            text = "You are spectating"
+        }
+        self.statusText.text = text
+        
     }
 
 
