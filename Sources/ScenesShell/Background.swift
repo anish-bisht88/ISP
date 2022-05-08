@@ -40,7 +40,7 @@ class Background : RenderableEntity {
         }
         onSightAudio = Audio(sourceURL: onSightAudioURL, shouldLoop: true)  
 
-        guard let backgroundImageURL = URL(string:"https://www.codermerlin.com/users/michael-sajdak/Background.png") else {
+        guard let backgroundImageURL = URL(string:"https://www.codermerlin.com/users/anish-bisht/bg.png") else {
             fatalError("could not get background")
         }
         backgroundImage = Image(sourceURL: backgroundImageURL)
@@ -71,7 +71,6 @@ class Background : RenderableEntity {
              isBackgroundPlaying = true
         }
        
-
         if minionImage.isReady && bananaAudio.isReady && minionState == minionKeys.count {
             onSightAudio.mode = .pause
             minionImage.renderMode = .destinationPoint(Point(x:100, y:200))
