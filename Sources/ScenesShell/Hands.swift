@@ -7,10 +7,10 @@ class Hands : RenderableEntity {
 
     var handValues = [1, 1]
     
-    init(type: String, positionRatios: [[Double]], initialNumbers : [Int] = [1, 1], rotations : [Double] = [0,0]) {
+    init(type: String, positionRatios: [[Double]], initialNumbers : [Int] = [1, 1], rotationIndexes : [Int] = [0,0]) {
         var tempArray = [Hand]()
         for index  in 0..<positionRatios.count {
-            tempArray.append(Hand(type: type, positionRatio: positionRatios[index], initialNumber: initialNumbers[index], rotation: rotations[index]))
+            tempArray.append(Hand(type: type, positionRatio: positionRatios[index], initialNumber: initialNumbers[index], rotationIndex: rotationIndexes[index]))
         }
         self.hands = tempArray
     }

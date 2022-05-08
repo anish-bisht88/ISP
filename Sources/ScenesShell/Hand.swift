@@ -6,7 +6,6 @@ class Hand : RenderableEntity {
 
     let hand : Image
     var imageSize = Size()
-    let rotation : Transform
     
     var sourceRect = Rect()
     var destRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 100, height: 100))
@@ -22,8 +21,8 @@ class Hand : RenderableEntity {
 
     var frame = 0
 
-    init(type: String, positionRatio: [Double], initialNumber : Int = 1, rotation : Double = 0.0) {
-        self.rotation = Transform(rotateRadians: rotation, mode: .toIdentity)
+    init(type: String, positionRatio: [Double], initialNumber : Int = 1, rotationIndex: Int) {
+        precondition(rotationIndex >= 0 && rotationIndex < 4, "invalid rotation index")
         self.initialNumber = initialNumber
         self.positionRatio = positionRatio
         switch type {
@@ -63,7 +62,7 @@ class Hand : RenderableEntity {
             fatalError("Invalid skin color given")
         }
         
-        sourceRect.topLeft = Point.zero
+        sourceRect.topLeft = Point(x: 0, y: rotationIndex*imageSize.height/4)
         sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
         super.init(name:"Hand")
     }
