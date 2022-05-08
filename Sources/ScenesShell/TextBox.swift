@@ -3,8 +3,9 @@ import Scenes
 import Foundation
 
 class TextBox : RenderableEntity {
-    var text = Text(location: Point.zero, text: "")
-    let fillStyle = FillStyle(color: Color(.black))
+    var text = Text(location: Point.zero, text: "", fillMode: .fillAndStroke)
+    let fillStyle = FillStyle(color: Color(.white))
+    let strokeStyle = StrokeStyle(color: Color(.black))
     let locationRatios : [Double]
     
     init(_ text: String, locationRatios: [Double] = [0.5,0.5] ) {
@@ -20,7 +21,7 @@ class TextBox : RenderableEntity {
     }
 
     override func render(canvas: Canvas){
-        canvas.render(self.fillStyle, self.text)
+        canvas.render(self.fillStyle, self.strokeStyle, self.text)
     }
 
     public func changeText(_ text: String) {

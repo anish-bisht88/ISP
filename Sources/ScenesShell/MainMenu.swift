@@ -14,7 +14,7 @@ class MainMenu : Layer {
     
     let list : List
     let waitTextBox = TextBox("Waiting for other player")
-    static let voteTextBox = TextBox("Press the spacebar to toggle your vote for immolation mode!", locationRatios: [0.5, 0.9])
+    static let voteTextBox = TextBox("Press the spacebar to toggle your vote for self-immolation mode!", locationRatios: [0.5, 0.9])
 
     static var arrayInitialized = false
     static var immolationVotes = [false, false]

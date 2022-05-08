@@ -9,7 +9,8 @@ class List : RenderableEntity {
     
     var destRects = [Rect]()
     var texts = [Text]()
-    let fillStyle = FillStyle(color: Color(.black))
+    let fillStyle = FillStyle(color: Color(.white))
+    let strokeStyle = StrokeStyle(color: Color(.black))
     
     var playerID : Int
     var titleText = Text(location: Point.zero, text: "")
@@ -41,7 +42,7 @@ class List : RenderableEntity {
         for index in 0..<images.count {
             canvas.setup(images[index])
    destRects.append(Rect(topLeft: Point(x: canvasSize.center.x, y: (index+1)*canvasSize.height/spacing), size: Size(width: canvasSize.width/3, height: canvasSize.height/spacing)))
-   texts.append(Text(location: Point(x: canvasSize.width/3, y: (index+1)*canvasSize.height/spacing+destRects[0].size.height/2), text: labels[index]))
+   texts.append(Text(location: Point(x: canvasSize.width/3, y: (index+1)*canvasSize.height/spacing+destRects[0].size.height/2), text: labels[index], fillMode: .fillAndStroke))
             texts[index].alignment = .center
             texts[index].font = "32pt Arial"
         }
@@ -57,7 +58,7 @@ class List : RenderableEntity {
         for index in 0..<images.count {
             images[index].renderMode = .sourceAndDestination(sourceRect: sourceRects[index], destinationRect: destRects[index])
 
-            canvas.render(fillStyle, images[index], texts[index], titleText, subtitleText)
+            canvas.render(fillStyle, strokeStyle, images[index], texts[index], titleText, subtitleText)
         }
     }
     
