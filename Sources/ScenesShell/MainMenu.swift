@@ -26,7 +26,7 @@ class MainMenu : Layer {
         }
         self.playerID = playerID
 
-        list = List(labels: ["kent", "test", "among us balls", "fortnite"], images: Array(repeating: "https://i.ibb.co/VJZ5Bpn/four.png", count: 4), sizes: Array(repeating: Size(width: 1280, height: 1024), count: 4), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
+        list = List(labels: ["kent", "test", "among us balls", "fortnite"], images: Array(repeating: Global.kentURL, count: 4), sizes: Array(repeating: Global.sheetSize, count: 4), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
         
         // Using a meaningful name can be helpful for debugging
         super.init(name:"MainMenu")

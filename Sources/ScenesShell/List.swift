@@ -10,7 +10,8 @@ class List : RenderableEntity {
     var destRects = [Rect]()
     var texts = [Text]()
     let fillStyle = FillStyle(color: Color(.white))
-    let strokeStyle = StrokeStyle(color: Color(.black))
+    let strokeStyle = StrokeStyle(color: Color(.gray))
+    let lineWidth = LineWidth(width: 1)
     
     var playerID : Int
     var titleText = Text(location: Point.zero, text: "")
@@ -58,7 +59,7 @@ class List : RenderableEntity {
         for index in 0..<images.count {
             images[index].renderMode = .sourceAndDestination(sourceRect: sourceRects[index], destinationRect: destRects[index])
 
-            canvas.render(fillStyle, strokeStyle, images[index], texts[index], titleText, subtitleText)
+            canvas.render(fillStyle, strokeStyle,lineWidth, images[index], texts[index], titleText, subtitleText)
         }
     }
     

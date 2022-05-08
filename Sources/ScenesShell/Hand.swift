@@ -8,7 +8,7 @@ class Hand : RenderableEntity {
     var imageSize = Size()
     
     var sourceRect = Rect()
-    var destRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 100, height: 100))
+    var destRect = Rect(topLeft: Point(x: 0, y: 0), size: Size())
     var globalLocation = Point()
     
     var isSelected = false
@@ -38,16 +38,16 @@ class Hand : RenderableEntity {
             hand = Image(sourceURL: handURL)
             imageSize = Global.imageSize
         case "kent":
-            guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/kenthand.png") else {
+            guard let handURL = URL(string: Global.kentURL) else {
                 fatalError("failed to create URL for kent test hand")
             }
-            imageSize = Global.kentImageSize
+            imageSize = Global.imageSize
             hand = Image(sourceURL: handURL)
         default:
             fatalError("Invalid skin color given")
         }
         
-        sourceRect.topLeft = Point(x: 0, y: rotationIndex*imageSize.height/4)
+        sourceRect.topLeft = Point(x: 0, y: rotationIndex*imageSize.height)
         sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
         super.init(name:"Hand")
     }
@@ -62,6 +62,7 @@ class Hand : RenderableEntity {
     override func setup(canvasSize: Size, canvas: Canvas) {
         canvas.setup(hand)
         originalPos = Point(x: Int(Double(canvasSize.width)*positionRatio[0]), y: Int(Double(canvasSize.height)*positionRatio[1]))
+        destRect.size = Size(width: canvasSize.width/6, height: canvasSize.width/6)
         changeHand(initialNumber)        
         move(originalPos)
     }
@@ -98,7 +99,7 @@ class Hand : RenderableEntity {
             hand = Image(sourceURL: handURL)
             imageSize = Global.imageSize
         case "kent":
-            guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/kenthand.png") else {
+            guard let handURL = URL(string: Global.kentURL) else {
                 fatalError("failed to create URL for kent test hand")
             }
             imageSize = Global.kentImageSize

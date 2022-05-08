@@ -7,8 +7,11 @@ import Igis
  */
 
 enum Global {
-    static let imageSize = Size(width: 256, height: 256)
+    static let imageSize = Size(width: 336, height: 252)
+    static let sheetSize = Size(width: 1680, height: 1008)
     static let kentImageSize = Size(width: 600, height: 800)
+
+    static let kentURL = "https://codermerlin.com/users/anish-bisht/kentfull.png"
 
     static var playerSkins = [String?]()
     static var winner : Int? = nil
