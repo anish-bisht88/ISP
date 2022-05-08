@@ -14,9 +14,13 @@ class MainScene : Scene, KeyDownHandler {
        One for the background, one for interaction,
        and one for the foreground.
      */
+
+    let menuBackground = MenuBackgroundLayer()
+    let mainMenu = MainMenu()
     let backgroundLayer = BackgroundLayer()
     let interactionLayer = InteractionLayer()
     let foregroundLayer = ForegroundLayer()
+    var hasSwitched = false
 
     init() {
         // Using a meaningful name can be helpful for debugging
@@ -24,9 +28,16 @@ class MainScene : Scene, KeyDownHandler {
 
         // We insert our Layers in the constructor
         // We place each layer in front of the previous layer
-        insert(layer:backgroundLayer, at:.back)
-        insert(layer:interactionLayer, at:.inFrontOf(object:backgroundLayer))
-        insert(layer:foregroundLayer, at:.front)
+        insert(layer: menuBackground, at: .back)
+        insert(layer: mainMenu, at: .front)
+
+    }
+
+    override func preCalculate(canvas: Canvas) {
+        if Global.playerSkins[0] != nil && Global.playerSkins[1] != nil && !hasSwitched {
+            switchToGame()
+            hasSwitched = true
+        }
     }
 
     override func preSetup(canvasSize: Size, canvas: Canvas) {
@@ -36,9 +47,24 @@ class MainScene : Scene, KeyDownHandler {
     override func postTeardown() {
         dispatcher.unregisterKeyDownHandler(handler: self)
     }
+
+    func switchToGame() {
+        remove(layer:mainMenu)
+        remove(layer:menuBackground)
+        for index in 0..<interactionLayer.handHandler.handPairs.count {
+            interactionLayer.handHandler.handPairs[index].changeSkin(Global.playerSkins[index]!)
+        }
+        insert(layer:backgroundLayer, at:.back)
+        insert(layer:interactionLayer, at:.inFrontOf(object:backgroundLayer))
+        insert(layer:foregroundLayer, at:.front)
+    }
     
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
-        backgroundLayer.background.onKeyDown(key: key, code: code, ctrlKey: ctrlKey, shiftKey: shiftKey, altKey: altKey, metaKey: metaKey)
-        interactionLayer.handHandler.onKeyDown(key: key, code: code, ctrlKey: ctrlKey, shiftKey: shiftKey, altKey: altKey, metaKey: metaKey)
+        if hasSwitched {
+            backgroundLayer.background.onKeyDown(key: key, code: code, ctrlKey: ctrlKey, shiftKey: shiftKey, altKey: altKey, metaKey: metaKey)
+            interactionLayer.handHandler.onKeyDown(key: key, code: code, ctrlKey: ctrlKey, shiftKey: shiftKey, altKey: altKey, metaKey: metaKey)
+        } else {
+            mainMenu.onKeyDown(key: key, code: code, ctrlKey:ctrlKey, shiftKey:shiftKey, altKey:altKey, metaKey:metaKey)
+        }
     }
 }

@@ -4,7 +4,7 @@ import Foundation
 
 class Hand : RenderableEntity {
 
-    let hand : Image
+    var hand : Image
     var imageSize = Size()
     
     var sourceRect = Rect()
@@ -26,21 +26,6 @@ class Hand : RenderableEntity {
         self.initialNumber = initialNumber
         self.positionRatio = positionRatio
         switch type {
-        case "minion":
-            guard let handURL = URL(string: "") else {
-                fatalError("Failed to create URL for minion hand")
-            }
-            hand = Image(sourceURL: handURL)
-        case "white":
-            guard let handURL = URL(string: "") else {
-                fatalError("Failed to create URL for white hand")
-            }
-            hand = Image(sourceURL: handURL)
-        case "brown":
-            guard let handURL = URL(string: "") else {
-                fatalError("Failed to create URL for brown hand")
-            }
-            hand = Image(sourceURL: handURL)
         case "black":
             guard let handURL = URL(string: "") else {
                 fatalError("Failed to create URL for black hand")
@@ -96,6 +81,32 @@ class Hand : RenderableEntity {
     func reset() {
         isSelected = false
         move(originalPos)
+    }
+
+    func changeSkin(_ str: String) {
+        let hand : Image
+        switch str {
+        case "black":
+            guard let handURL = URL(string: "") else {
+                fatalError("Failed to create URL for black hand")
+            }
+            hand = Image(sourceURL: handURL)
+        case "test":
+            guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/test.png") else {
+                fatalError("Failed to create URL for test hand")
+            }
+            hand = Image(sourceURL: handURL)
+            imageSize = Global.imageSize
+        case "kent":
+            guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/kenthand.png") else {
+                fatalError("failed to create URL for kent test hand")
+            }
+            imageSize = Global.kentImageSize
+            hand = Image(sourceURL: handURL)
+        default:
+            fatalError("Invalid skin color given")
+        }
+        self.hand = hand
     }
 
 }

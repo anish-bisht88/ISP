@@ -6,7 +6,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
 
     var numberToSplit = 1
 
-    let handPairs = [Hands(type: Global.playerSkins[0]!, positionRatios: [[0.25, 0.25], [0.25, 0.75]]), Hands(type: Global.playerSkins[1]!, positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [1,1])]
+    let handPairs = [Hands(type: "test", positionRatios: [[0.25, 0.25], [0.25, 0.75]]), Hands(type: "test", positionRatios: [[0.75, 0.25], [0.75, 0.75]], initialNumbers: [1,1])]
     static var activePlayer = 0
     static var handPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
     static var originalHandPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)

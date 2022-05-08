@@ -56,4 +56,10 @@ class Hands : RenderableEntity {
         selectedHand = nil
     }
 
+    func changeSkin(_ str: String) {
+        for hand in hands {
+            hand.changeSkin(str)
+        }
+    }
+
 }
