@@ -1,10 +1,10 @@
 import Scenes
 import Igis
 
-  /*
-     This class is responsible for the foreground Layer.
-     Internally, it maintains the RenderableEntities for this layer.
-   */
+/*
+ This class is responsible for the foreground Layer.
+ Internally, it maintains the RenderableEntities for this layer.
+ */
 
 
 class MainMenu : Layer {
@@ -14,28 +14,31 @@ class MainMenu : Layer {
     
     let list : List
     let waitTextBox = TextBox("Waiting for other player")
+    static let voteTextBox = TextBox("Press the spacebar to toggle your vote for immolation mode!", locationRatios: [0.5, 0.9])
 
     static var arrayInitialized = false
+    static var immolationVotes = [false, false]
 
-    init() {
+    init(_ playerID: Int) {
         if !MainMenu.arrayInitialized {
             Global.playerSkins = [nil, nil]
             MainMenu.arrayInitialized = true
         }
-        self.playerID = MainMenu.players
-        MainMenu.players += 1
+        self.playerID = playerID
 
-        list = List(labels: Array(repeating: "four", count: 4), images: Array(repeating: "https://i.ibb.co/VJZ5Bpn/four.png", count: 4), sizes: Array(repeating: Size(width: 1280, height: 1024), count: 4), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
+        list = List(labels: ["kent", "test", "among us balls", "fortnite"], images: Array(repeating: "https://i.ibb.co/VJZ5Bpn/four.png", count: 4), sizes: Array(repeating: Size(width: 1280, height: 1024), count: 4), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
         
-          // Using a meaningful name can be helpful for debugging
-          super.init(name:"MainMenu")
+        // Using a meaningful name can be helpful for debugging
+        super.init(name:"MainMenu")
 
-          // We insert our RenderableEntities in the constructor
-          if playerID < 2 {
-              insert(entity: list, at: .front)
-          } else {
-              insert(entity: waitTextBox, at: .front)
-          }
+        // We insert our RenderableEntities in the constructor
+        if playerID < 2 {
+            insert(entity: list, at: .front)
+            insert(entity: MainMenu.voteTextBox, at: .front)
+        } else {
+            insert(entity: waitTextBox, at: .front)
+            
+        }
     }
 
     override func postCalculate(canvas: Canvas) {
@@ -47,25 +50,34 @@ class MainMenu : Layer {
         } 
     }
 
+    public static func updateVotes() {
+        MainMenu.voteTextBox.changeText("Press space to toggle your vote for self-immolation mode! (current votes: \(MainMenu.immolationVotes))")
+    }
 
-      
 
-      func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
-          if let skin = getSkin(key), playerID < Global.playerSkins.count {
-              Global.playerSkins[playerID] = skin
-          }
-      }
+    
 
-      func getSkin(_ str: String) -> String? {
-          switch str {
-          case "k":
-              return "kent"
-          case "t":
-              return "test"
-          default:
-              return nil
-          }
-      }
+    func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
+        if playerID < Global.playerSkins.count {
+            if let skin = getSkin(key) { 
+                Global.playerSkins[playerID] = skin
+            } else if code == "Space" {
+                MainMenu.immolationVotes[playerID].toggle()
+                MainMenu.updateVotes()
+            }
+        }
+    }
 
-     
-  }
+    func getSkin(_ str: String) -> String? {
+        switch str {
+        case "k":
+            return "kent"
+        case "t":
+            return "test"
+        default:
+            return nil
+        }
+    }
+
+    
+}

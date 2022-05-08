@@ -16,13 +16,24 @@ class MainScene : Scene, KeyDownHandler {
      */
 
     let menuBackground = MenuBackgroundLayer()
-    let mainMenu = MainMenu()
+    let mainMenu : MainMenu
     let backgroundLayer = BackgroundLayer()
-    let interactionLayer = InteractionLayer()
+    let interactionLayer : InteractionLayer
     let foregroundLayer = ForegroundLayer()
     var hasSwitched = false
 
+    static var players = 0
+    let playerID : Int
+
+    var frame = 0
+    var isReady = false
+    var startTime : Int? = nil
+
     init() {
+        playerID = MainScene.players
+        MainScene.players += 1
+        interactionLayer = InteractionLayer(playerID)
+        mainMenu = MainMenu(playerID)
         // Using a meaningful name can be helpful for debugging
         super.init(name:"Main")
 
@@ -34,9 +45,17 @@ class MainScene : Scene, KeyDownHandler {
     }
 
     override func preCalculate(canvas: Canvas) {
-        if Global.playerSkins[0] != nil && Global.playerSkins[1] != nil && !hasSwitched {
-            switchToGame()
-            hasSwitched = true
+        frame += 1
+        if Global.playerSkins[0] != nil && Global.playerSkins[1] != nil && !isReady {
+            startTime = frame
+            menuBackground.background.music.mode = .pause
+            Global.immolationMode = MainMenu.immolationVotes == [true, true]
+            isReady = true
+        } else if let startTime = self.startTime {
+            if isReady && !hasSwitched && frame > 30+startTime {
+                switchToGame()
+                hasSwitched = true
+            }
         }
     }
 

@@ -9,15 +9,18 @@ import Igis
 
 class InteractionLayer : Layer {
 
-    let handHandler = HandHandler()
+    let handHandler : HandHandler
 
     var time = 0
     var endTime : Int? = nil
     var winCondition = false
     var gameOver = false
+
+    let playerID: Int
     
-    init() {
-        
+    init(_ playerID: Int) {
+        handHandler = HandHandler(playerID)
+        self.playerID = playerID
         // Using a meaningful name can be helpful for debugging
         super.init(name:"Interaction")
 
@@ -36,9 +39,11 @@ class InteractionLayer : Layer {
         if let winner = HandHandler.winner, !winCondition {
             endTime = time
             winCondition = true
+            Global.winner = winner
         }else if let endTime = self.endTime, !gameOver {
             if time > 30+endTime {
                 remove(entity: handHandler)
+                insert(entity:EndScreen(playerID), at: .front)
                 gameOver = true
                 print("ending game...")
             }

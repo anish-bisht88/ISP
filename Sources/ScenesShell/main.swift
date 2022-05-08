@@ -11,6 +11,9 @@ enum Global {
     static let kentImageSize = Size(width: 600, height: 800)
 
     static var playerSkins = [String?]()
+    static var winner : Int? = nil
+
+    static var immolationMode = false
         
     enum PlayerHand : Int {
         case leftHand

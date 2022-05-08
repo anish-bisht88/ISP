@@ -12,7 +12,7 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
     static var originalHandPositions = Array(repeating: Array(repeating: Point.zero, count: 2), count: 2)
     static var handValues = Array(repeating: Array(repeating: 1, count: 2), count: 2)
 
-    static var players = 0
+    
     let playerID : Int
 
     static var round = 1
@@ -30,9 +30,8 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
 
     let plusButton : Image
     var plusRect = Rect()
-    init() {
-        playerID = HandHandler.players
-        HandHandler.players += 1
+    init(_ playerID: Int) {
+        self.playerID = playerID
         playerCheck: for index in 0..<HandHandler.joinedPlayers.count {
             if !HandHandler.joinedPlayers[index] {
                 HandHandler.joinedPlayerIDs[index] = self.playerID
@@ -120,7 +119,11 @@ class HandHandler : RenderableEntity, EntityMouseClickHandler, MouseMoveHandler 
             resetHands()
             for index in 0..<HandHandler.handValues.count {
                 if HandHandler.handValues[index] == [0,0] {
-                    HandHandler.winner = index
+                    if Global.immolationMode == true {
+                        HandHandler.winner = index
+                    } else {
+                        HandHandler.winner = other(index)
+                    }
                 }
             }
         }

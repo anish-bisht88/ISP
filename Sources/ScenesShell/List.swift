@@ -36,12 +36,12 @@ class List : RenderableEntity {
 
     override func setup(canvasSize: Size, canvas: Canvas) {
         let spacing = images.count + 2
-        titleText.location = Point(x: canvasSize.center.x, y: canvasSize.height/24)
-        subtitleText.location = Point(x: canvasSize.center.x, y: canvasSize.height/24+48)
+        titleText.location = Point(x: canvasSize.center.x, y: canvasSize.height/12)
+        subtitleText.location = Point(x: canvasSize.center.x, y: canvasSize.height/12+48)
         for index in 0..<images.count {
             canvas.setup(images[index])
    destRects.append(Rect(topLeft: Point(x: canvasSize.center.x, y: (index+1)*canvasSize.height/spacing), size: Size(width: canvasSize.width/3, height: canvasSize.height/spacing)))
-   texts.append(Text(location: Point(x: canvasSize.width/4, y: (index+1)*canvasSize.height/spacing+destRects[0].size.height/2), text: labels[index]))
+   texts.append(Text(location: Point(x: canvasSize.width/3, y: (index+1)*canvasSize.height/spacing+destRects[0].size.height/2), text: labels[index]))
             texts[index].alignment = .center
             texts[index].font = "32pt Arial"
         }
