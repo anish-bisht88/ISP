@@ -27,7 +27,7 @@ class MainMenu : Layer {
         }
         self.playerID = playerID
 
-        list = List(labels: ["kent", "minion", "black"], images: [Global.kentURL, Global.minionURL, Global.blackURL], sizes: Array(repeating: Global.sheetSize, count: 3), title: "Welcome to Sticks!", subtitle: "Click the desired color to select it!",  playerID: playerID)
+        list = List(labels: ["kent", "minion", "black"], images: [Global.kentURL, Global.minionURL, Global.blackURL], sizes: Array(repeating: Global.sheetSize, count: 3), title: "Welcome to Sticks!", subtitle: "Click the text corresponding to your desired skin to select it!",  playerID: playerID)
 
         
         // Using a meaningful name can be helpful for debugging
@@ -63,8 +63,10 @@ class MainMenu : Layer {
             if let skin = getSkin(key) { 
                 Global.playerSkins[playerID] = skin
             } else if code == "Space" {
+                remove(entity: MainMenu.voteTextBox)
                 MainMenu.immolationVotes[playerID].toggle()
                 MainMenu.updateVotes()
+                insert(entity: MainMenu.voteTextBox, at: .front)
             }
         }
     }
