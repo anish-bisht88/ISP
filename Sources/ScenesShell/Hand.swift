@@ -25,27 +25,11 @@ class Hand : RenderableEntity {
         precondition(rotationIndex >= 0 && rotationIndex < 4, "invalid rotation index")
         self.initialNumber = initialNumber
         self.positionRatio = positionRatio
-        switch type {
-        case "black":
-            guard let handURL = URL(string: "") else {
-                fatalError("Failed to create URL for black hand")
-            }
-            hand = Image(sourceURL: handURL)
-        case "test":
-            guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/test.png") else {
-                fatalError("Failed to create URL for test hand")
-            }
-            hand = Image(sourceURL: handURL)
-            imageSize = Global.imageSize
-        case "kent":
-            guard let handURL = URL(string: Global.kentURL) else {
-                fatalError("failed to create URL for kent test hand")
-            }
-            imageSize = Global.imageSize
-            hand = Image(sourceURL: handURL)
-        default:
-            fatalError("Invalid skin color given")
+        guard let handURL = URL(string: "https://codermerlin.com/users/anish-bisht/test.png") else {
+            fatalError("Failed to create URL for test hand")
         }
+        hand = Image(sourceURL: handURL)
+        imageSize = Global.imageSize
         
         sourceRect.topLeft = Point(x: 0, y: rotationIndex*imageSize.height)
         sourceRect.size = Size(width: imageSize.width, height: imageSize.height)
@@ -87,9 +71,9 @@ class Hand : RenderableEntity {
     func changeSkin(_ str: String) {
         let hand : Image
         switch str {
-        case "black":
-            guard let handURL = URL(string: "") else {
-                fatalError("Failed to create URL for black hand")
+        case "minion":
+            guard let handURL = URL(string: Global.minionURL) else {
+                fatalError("Failed to create URL for minion hands")
             }
             hand = Image(sourceURL: handURL)
         case "test":

@@ -26,7 +26,7 @@ class MainMenu : Layer {
         }
         self.playerID = playerID
 
-        list = List(labels: ["kent", "test", "among us balls", "fortnite"], images: Array(repeating: Global.kentURL, count: 4), sizes: Array(repeating: Global.sheetSize, count: 4), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
+        list = List(labels: ["kent", "minion"], images: [Global.kentURL, Global.minionURL], sizes: Array(repeating: Global.sheetSize, count: 2), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
         
         // Using a meaningful name can be helpful for debugging
         super.init(name:"MainMenu")
@@ -72,8 +72,8 @@ class MainMenu : Layer {
         switch str {
         case "k":
             return "kent"
-        case "t":
-            return "test"
+        case "m":
+            return "minion"
         default:
             return nil
         }
