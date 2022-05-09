@@ -12,6 +12,7 @@ enum Global {
     static let kentImageSize = Size(width: 600, height: 800)
 
     static let kentURL = "https://codermerlin.com/users/anish-bisht/kentfull.png"
+    static let minionURL = "https://codermerlin.com/users/anish-bisht/minionfull.png"
 
     static var playerSkins = [String?]()
     static var winner : Int? = nil
