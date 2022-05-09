@@ -1,3 +1,4 @@
+
 import Scenes
 import Igis
 
@@ -26,7 +27,7 @@ class MainMenu : Layer {
         }
         self.playerID = playerID
 
-        list = List(labels: ["kent", "test", "among us balls", "fortnite"], images: Array(repeating: Global.kentURL, count: 4), sizes: Array(repeating: Global.sheetSize, count: 4), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
+        list = List(labels: ["", "", "", ""], images: Array(repeating: Global.kentURL, count: 4), sizes: Array(repeating: Global.sheetSize, count: 4), title: "Welcome to Sticks!", subtitle: "Select your desired skin!",  playerID: playerID)
         
         // Using a meaningful name can be helpful for debugging
         super.init(name:"MainMenu")
@@ -44,7 +45,7 @@ class MainMenu : Layer {
     override func postCalculate(canvas: Canvas) {
         if playerID < 2 {
             if Global.playerSkins[playerID] != nil {
-                remove(entity: list)
+//                remove(entity: list)
                 insert(entity: waitTextBox, at: .front)
             }
         } 

@@ -15,13 +15,13 @@ class MainScene : Scene, KeyDownHandler {
        and one for the foreground.
      */
 
-    let menuBackground = MenuBackgroundLayer()
+    let menuBackground : MenuBackgroundLayer
     let mainMenu : MainMenu
     let backgroundLayer = BackgroundLayer()
     let interactionLayer : InteractionLayer
     let foregroundLayer = ForegroundLayer()
     var hasSwitched = false
-
+    
     static var players = 0
     let playerID : Int
 
@@ -34,6 +34,7 @@ class MainScene : Scene, KeyDownHandler {
         MainScene.players += 1
         interactionLayer = InteractionLayer(playerID)
         mainMenu = MainMenu(playerID)
+        menuBackground = MenuBackgroundLayer(playerID)
         // Using a meaningful name can be helpful for debugging
         super.init(name:"Main")
 
@@ -69,6 +70,7 @@ class MainScene : Scene, KeyDownHandler {
 
     func switchToGame() {
         remove(layer:mainMenu)
+//        remove(entity:menuButtons)
         remove(layer:menuBackground)
         for index in 0..<interactionLayer.handHandler.handPairs.count {
             interactionLayer.handHandler.handPairs[index].changeSkin(Global.playerSkins[index]!)
