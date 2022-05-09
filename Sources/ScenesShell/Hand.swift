@@ -86,7 +86,12 @@ class Hand : RenderableEntity {
             guard let handURL = URL(string: Global.kentURL) else {
                 fatalError("failed to create URL for kent test hand")
             }
-            imageSize = Global.kentImageSize
+            imageSize = Global.imageSize
+            hand = Image(sourceURL: handURL)
+        case "black":
+            guard let handURL = URL(string: Global.blackURL) else {
+                fatalError("failed to get url for black hand")
+            }
             hand = Image(sourceURL: handURL)
         default:
             fatalError("Invalid skin color given")

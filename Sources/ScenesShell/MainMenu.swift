@@ -27,7 +27,7 @@ class MainMenu : Layer {
         }
         self.playerID = playerID
 
-        list = List(labels: ["kent", "minion"], images: [Global.kentURL, Global.minionURL], sizes: Array(repeating: Global.sheetSize, count: 2), title: "Welcome to Sticks!", subtitle: "Press the first key of the desired color to select it!",  playerID: playerID)
+        list = List(labels: ["kent", "minion", "black"], images: [Global.kentURL, Global.minionURL, Global.blackURL], sizes: Array(repeating: Global.sheetSize, count: 3), title: "Welcome to Sticks!", subtitle: "Click the desired color to select it!",  playerID: playerID)
 
         
         // Using a meaningful name can be helpful for debugging
@@ -46,7 +46,6 @@ class MainMenu : Layer {
     override func postCalculate(canvas: Canvas) {
         if playerID < 2 {
             if Global.playerSkins[playerID] != nil {
-//                remove(entity: list)
                 insert(entity: waitTextBox, at: .front)
             }
         } 
@@ -76,6 +75,8 @@ class MainMenu : Layer {
             return "kent"
         case "m":
             return "minion"
+        case "b":
+            return "black"
         default:
             return nil
         }

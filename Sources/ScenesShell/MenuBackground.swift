@@ -14,6 +14,7 @@ class MenuBackground : RenderableEntity {
 
     let music: Audio
     var isBackgroundPlaying = false
+    var stopMusic = false
 
     let image: Image
 
@@ -39,11 +40,16 @@ class MenuBackground : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
-        if  music.isReady  && image.isReady{
+        if  music.isReady  && image.isReady && (!isBackgroundPlaying || stopMusic) {
             image.renderMode = .destinationRect(clearRect)
             canvas.render(music, image)
             isBackgroundPlaying = true
         }
+    }
+
+    func stopTheMusic() {
+        music.mode = .pause
+        stopMusic = true
     }
     
 }

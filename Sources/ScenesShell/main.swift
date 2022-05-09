@@ -13,6 +13,7 @@ enum Global {
 
     static let kentURL = "https://codermerlin.com/users/anish-bisht/kentfull.png"
     static let minionURL = "https://codermerlin.com/users/anish-bisht/minionfull.png"
+    static let blackURL = "https://codermerlin.com/users/anish-bisht/blackfull.png"
 
     static var playerSkins = [String?]()
     static var winner : Int? = nil
