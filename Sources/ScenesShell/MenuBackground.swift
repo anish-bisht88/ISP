@@ -40,10 +40,14 @@ class MenuBackground : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
-        if  music.isReady  && image.isReady && (!isBackgroundPlaying || stopMusic) {
+        if  music.isReady   && (!isBackgroundPlaying || stopMusic) {
+            canvas.render(music)
+            isBackgroundPlaying
+              = true
+        }
+        if image.isReady {
             image.renderMode = .destinationRect(clearRect)
-            canvas.render(music, image)
-            isBackgroundPlaying = true
+            canvas.render(image)
         }
     }
 
