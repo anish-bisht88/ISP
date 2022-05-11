@@ -49,7 +49,9 @@ class MainScene : Scene, KeyDownHandler {
         frame += 1
         if Global.playerSkins[0] != nil && Global.playerSkins[1] != nil && !isReady {
             startTime = frame
-            menuBackground.background.music.mode = .pause
+            menuBackground.background.stopTheMusic()
+            
+            
             Global.immolationMode = MainMenu.immolationVotes == [true, true]
             isReady = true
         } else if let startTime = self.startTime {
