@@ -15,6 +15,9 @@ enum Global {
     static let minionURL = "https://codermerlin.com/users/anish-bisht/minionfull.png"
     static let blackURL = "https://codermerlin.com/users/anish-bisht/blackfull.png"
 
+    static let leftPlayerWin = "https://codermerlin.com/users/anish-bisht/stupidR.png"
+    static let rightPlayerWin = "https://codermerlin.com/users/anish-bisht/stupidL.png"
+
     static var playerSkins = [String?]()
     static var winner : Int? = nil
 
