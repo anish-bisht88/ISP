@@ -51,8 +51,8 @@ class EndScreen : RenderableEntity {
         text.font = "128pt Helvetica Bold"
         text.alignment = .center
 
-        destRect.topLeft = Point(x: 3*canvasSize.width/8, y: 3*canvasSize.height/8)
-        destRect.size = Size(width: canvasSize.width/6, height: Int(1.7*Double(canvasSize.width/6)))
+        destRect.topLeft = Point(x: canvasSize.width/2-canvasSize.width/6, y: canvasSize.height/4)
+        destRect.size = Size(width: canvasSize.width/3, height: 2*canvasSize.width/3)
 
     }
 
